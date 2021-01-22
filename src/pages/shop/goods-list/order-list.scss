@@ -1,0 +1,76 @@
+page{
+	background-color: #f5f5f5;
+}
+.order-item {
+	display: flex;
+	flex-direction: column;
+	padding: 20rpx;
+	background-color: #fff;
+	margin: 20rpx;
+	border-radius: 10rpx;
+}
+
+.order-item .head-wrap {
+	display: flex;
+	margin-bottom: 20rpx;
+	align-items: center;
+}
+
+.order-item .head-wrap .status {
+	margin-left: auto;
+	color: #999;
+	font-size: 28rpx;
+}
+
+.order-item .head-wrap image {
+	width: 30rpx;
+	height: 30rpx;
+}
+
+.order-item .goods-info {
+	display: flex;
+}
+
+.order-item .goods-info .info-c{
+	width: 70%;
+}
+.order-item .goods-info .info-c .goods-title {
+	margin-bottom: 20rpx;
+}
+
+.order-item .goods-info .info-c .specs-list .item {
+	display: flex;
+	font-size: 10px;
+	margin-bottom: 10rpx;
+}
+
+.order-item .goods-info .info-c .specs-list .item>text {
+	margin-left: auto;
+	color: #616161;
+}
+
+.order-item .goods-info>image {
+	margin-right: 20rpx;
+	width: 120rpx;
+	height: 120rpx;
+}
+
+.order-item .total-amount{
+	margin: 20rpx;
+	text-align: right;
+}
+
+.order-item .total-amount .money{
+	color: #ec5151;
+	margin-left: 10rpx;
+}
+
+.order-item .order-footer{
+	display: flex;
+	justify-content: flex-end;
+	padding-top: 20rpx;
+}
+
+.order-item .order-footer .u-btn{
+	margin: 0 10rpx 0 0;
+}
