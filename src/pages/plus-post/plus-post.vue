@@ -103,6 +103,7 @@ export default {
               Authorization: 'Bearer ' + uni.getStorageSync("token")
             },
             success: (res2) => {
+              console.log(res2)
               let rs = JSON.parse(res2.data)
               if (rs.code == "00000") {
                 that.form.media.push(rs.data);

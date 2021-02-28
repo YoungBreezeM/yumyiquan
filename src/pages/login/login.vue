@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-26 15:34:54
- * @LastEditTime: 2021-01-19 16:02:27
+ * @LastEditTime: 2021-02-13 09:11:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /yj-project/src/pages/login/login.vue
@@ -9,7 +9,7 @@
 <template>
   <view class="login">
     <image class="logo"
-           src="https://oss.ymeoo.cn/logo.png"></image>
+           src="http://121.36.100.85:3389/default/%E5%85%AB%E5%8D%A6.jpeg"></image>
     <text class="txt1">申请获取以下权限</text>
     <text class="txt2">获取你的公开信息（昵称、头像等）</text>
     <u-button type="success"

@@ -9,6 +9,7 @@
               :key="index">
           <block v-if="item.type == 1">
             <u-lazy-load threshold="-450"
+                         v-if="item.media[0]"
                          border-radius="10 10 0 0"
                          :image="item.media[0]"
                          :index="index"></u-lazy-load>
@@ -16,6 +17,7 @@
           <block v-else>
             <video class="post-video"
                    :controls="false"
+                   object-fit="contain"
                    :show-center-play-btn="false"
                    :src="item.media[0]"></video>
             <view class="video-tag">
@@ -51,6 +53,7 @@
               :key="index">
           <block v-if="item.type == 1">
             <u-lazy-load threshold="-450"
+                         v-if="item.media[0]"
                          border-radius="10 10 0 0"
                          :image="item.media[0]"
                          :index="index"></u-lazy-load>
@@ -58,6 +61,7 @@
           <block v-else>
             <video class="post-video"
                    :controls="false"
+                   object-fit="contain"
                    :show-center-play-btn="false"
                    :src="item.media[0]"></video>
             <view class="video-tag">

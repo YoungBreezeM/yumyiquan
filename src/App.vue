@@ -41,12 +41,12 @@ export default {
         this.$store.state.messegeNum = numCount;
         if (numCount > 0) {
           uni.setTabBarBadge({
-            index: 2,
+            index: 3,
             text: numCount.toString()
           })
         } else {
           uni.removeTabBarBadge({
-            index: 2
+            index: 3
           })
         }
       })

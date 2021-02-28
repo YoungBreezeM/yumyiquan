@@ -36,7 +36,7 @@
                    v-for="(item,index) in msgNum.bulletins"
                    :key="index">
           <u-avatar class="avatar"
-                    :src="avatar"></u-avatar>
+                    :src="item.avatar"></u-avatar>
           <view class="right">
             <view>
               <text style="margin-right: 10rpx;">易圈小助手</text>
@@ -98,7 +98,7 @@
 export default {
   data () {
     return {
-      avatar: "http://127.0.0.1:9000/default/%E5%85%AB%E5%8D%A62.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20210120%2F%2Fs3%2Faws4_request&X-Amz-Date=20210120T070137Z&X-Amz-Expires=432000&X-Amz-SignedHeaders=host&X-Amz-Signature=669bf6971c5146cb3f72ada8eb13a11e7f879d3169943d06268fcf950cb0cd65",
+      avatar: "",
       showSheet: false,
       showChatSheet: false,
       sheetList: [{
@@ -109,6 +109,7 @@ export default {
         thumb_collect: 0,
         follow: 0,
         comment: 0,
+        favoritesAndThumb: 0,
         article_msg_list: []
       },
       checkedMsgId: "",
@@ -157,12 +158,12 @@ export default {
         let numCount = num.comment + num.follow + num.favoritesAndThumb + msgIsRead;
         if (numCount > 0) {
           uni.setTabBarBadge({
-            index: 2,
+            index: 3,
             text: numCount.toString()
           })
         } else {
           uni.removeTabBarBadge({
-            index: 2
+            index: 3
           })
         }
       })

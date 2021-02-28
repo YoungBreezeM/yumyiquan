@@ -3,11 +3,12 @@
     <view class="head">
       <view class="tab-box">
         <u-tabs name="tab_name"
+                ref="uTabs"
                 font-size="35"
                 bg-color="#fff"
                 :list="tabs"
                 active-color="#616161"
-                :is-scroll="false"
+                :is-scroll="true"
                 :current="current"
                 @change="tabChange"></u-tabs>
       </view>
@@ -41,9 +42,25 @@
                           :loadStatus="loadStatus"></post-waterfall>
         </view>
       </view>
+      <view v-show="current===3">
+        <view class="wrap">
+          <u-swiper :list="list"
+                    title="true"
+                    :effect3d="true"></u-swiper>
+        </view>
+        <view v-for="(item,index) in list"
+              class="item"
+              :key="index">
+          <image class="game-item"
+                 @click="toBuGua(index)"
+                 :src="item.image">
+          </image>
+        </view>
+      </view>
     </view>
     <!-- 返回顶部 -->
     <u-back-top :scroll-top="scrollTop"></u-back-top>
+    <u-toast ref="uToast" />
   </view>
 </template>
 
@@ -52,11 +69,21 @@ var QQMapWX = require('../../utils/qqmap-wx-jssdk.min.js');
 import postList from '../../components/post-list/post-list.vue';
 import topicList from '../../components/topic-list/topic-list.vue';
 import postWaterfall from '../../components/post-waterfall/post-waterfall.vue';
+import UButton from '../../uview-ui/components/u-button/u-button.vue';
+import SwiperVideo from '../swiper-video/swiper-video.vue';
+import UTabsSwiper from '../../uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue';
+import UImage from '../../uview-ui/components/u-image/u-image.vue';
+import UToast from '../../uview-ui/components/u-toast/u-toast.vue';
 export default {
   components: {
     postList,
     topicList,
-    postWaterfall
+    postWaterfall,
+    UButton,
+    SwiperVideo,
+    UTabsSwiper,
+    UImage,
+    UToast
   },
   data () {
     return {
@@ -67,6 +94,22 @@ export default {
       },
       {
         tab_name: uni.getStorageSync("district") || '同城'
+      },
+      {
+        tab_name: '互动'
+      },
+      ],
+      list: [{
+        image: 'http://121.36.100.85:3389/default/%E6%97%85%E8%A1%8C.jpeg',
+        title: '善易者不占，知易者不占而知'
+      },
+      {
+        image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+        title: '身无彩凤双飞翼，心有灵犀一点通'
+      },
+      {
+        image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
+        title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
       }
       ],
       current: 1,
@@ -96,13 +139,10 @@ export default {
     }
   },
   onLoad () {
-
-
-  },
-  onShow () {
     this.$H.get("/yj-grouping/user/me").then(res => {
+      console.log(res)
       if (res.code === "00000") {
-        this.getPostList();
+        this.getPostList(false);
 
         //#ifdef MP-WEIXIN
         wx.showShareMenu({
@@ -120,6 +160,10 @@ export default {
         })
       }
     })
+
+  },
+  onShow () {
+
   },
   onPullDownRefresh () {
     this.page1 = 1;
@@ -135,7 +179,6 @@ export default {
     }
 
     if (this.current === 1) {
-      this.$refs.postwaterfall.clear();
       this.getPostList();
     }
 
@@ -163,7 +206,7 @@ export default {
 
     if (this.current === 1 && this.loadStatus != "nomore") {
       this.page1++
-      this.getPostList();
+      this.getPostList(true);
     }
 
     if (this.current === 2 && this.loadStatus != "nomore") {
@@ -180,10 +223,41 @@ export default {
     }
   },
   methods: {
+    toVideo () {
+      uni.navigateTo({
+        url: "/pages/swiper-video/swiper-video"
+      })
+    },
+    toBuGua (index) {
+      if (index == 0) {
+        uni.navigateTo({
+          url: "/pages/gua/gua"
+        })
+      } else {
+        this.$refs.uToast.show({
+          title: '功能待开发...',
+          type: 'warn',
+        })
+      }
+
+    },
+    // view左右移动，通知tabs的滑块跟随移动
+    transition (e) {
+      let dx = e.detail.dx;
+      this.$refs.uTabs.setDx(dx);
+    },
+    // 由于swiper的内部机制问题，快速切换swiper不会触发dx的连续变化，需要在结束时重置状态
+    // swiper滑动结束，分别设置tabs和swiper的状态
+    animationfinish (e) {
+      let current = e.detail.current;
+      this.$refs.uTabs.setFinishCurrent(current);
+      this.swiperCurrent = current;
+      this.current = current;
+    },
     getNearbyPost () {
       this.loadStatus = "loading";
       if (!this.showOpenLocation) {
-        this.$H.get('/yj-grouping/article/pages/' + this.page2 + "/" + this.limit)
+        this.$H.get('/yj-grouping/article/pages/' + this.page3 + "/" + this.limit)
           .then(res => {
             console.log(res)
             res.data.forEach(item => {
@@ -191,8 +265,8 @@ export default {
               item.distance = 10;
             })
             this.nearbyPostList = this.nearbyPostList.concat(res.data);
-            console.log(this.page1 * this.limit)
-            if (res.total <= this.page1 * this.limit) {
+            res.total = res.total ? res.total : 0
+            if (res.total <= this.page3 * this.limit) {
               this.loadStatus = "nomore";
             } else {
               this.loadStatus = "loadmore"
@@ -234,22 +308,22 @@ export default {
       })
     },
     tabChange (index) {
-      this.page1 = 1;
-      this.page2 = 1;
-      this.page3 = 1;
+      // this.page1 = 1;
+      // this.page2 = 1;
+      // this.page3 = 1;
 
       this.current = index;
-      if (index === 0) {
+      if (index === 0 && this.page2 == 1) {
         this.followPost = [];
         this.getFollowPost();
       }
-      if (index === 1) {
+      if (index === 1 && this.page1 == 1) {
         this.$refs.postwaterfall.clear();
         this.postList = [];
         this.getPostList();
       }
 
-      if (index == 2) {
+      if (index == 2 & this.page3 == 1) {
         if (!this.showOpenLocation) {
           this.$refs.waterfall.clear();
           this.nearbyPostList = [];
@@ -258,8 +332,13 @@ export default {
 
       }
     },
-    getPostList () {
+    getPostList (isConcat = false) {
       this.loadStatus = "loading";
+      if (!isConcat) {
+        this.postList = [];
+        this.$refs.postwaterfall.clear();
+      }
+
       this.$H.get('/yj-grouping/article/pages/' + this.page1 + "/" + this.limit)
         .then(res => {
           console.log(res)
@@ -267,6 +346,8 @@ export default {
             item.media = JSON.parse(item.media)
           })
           this.postList = this.postList.concat(res.data);
+          console.log(this.postList)
+          res.total = res.total ? res.total : 0
           console.log(this.page1 * this.limit)
           if (res.total <= this.page1 * this.limit) {
             this.loadStatus = "nomore";
@@ -295,4 +376,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "index.scss";
+.wrap {
+  padding: 40rpx;
+}
+.item {
+  padding: 40rpx 20rpx 0 40rpx;
+}
+.game-item {
+  width: 100%;
+  height: 250rpx;
+  border-radius: 10rpx;
+}
 </style>

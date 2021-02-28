@@ -26,7 +26,7 @@
           <block v-if="topicList&&topicList.length > 0 "
                  v-for="(item,index) in topicList"
                  :key="index">
-            <navigator :url="'/pages/topic-detail/topic-detail?id='+item.id">
+            <view @click="toTarget(item)">
               <view class="topic-item">
                 <u-image width="100rpx"
                          height="100rpx"
@@ -41,7 +41,7 @@
                   </view>
                 </view>
               </view>
-            </navigator>
+            </view>
           </block>
           <block v-if="topicList&&topicList.length=== 0">
             <u-empty margin-top="100"
@@ -58,6 +58,7 @@
 export default {
   data () {
     return {
+      isBack: false,
       scrollTop: 0, //tab标题的滚动条位置
       current: 0, // 预设当前项的值
       menuHeight: 0, // 左边菜单的高度
@@ -75,9 +76,33 @@ export default {
       this.classId = options.class_id;
     }
 
+    if (options.isBack) {
+      this.isBack = true;
+    }
+
     this.getClassList();
   },
   methods: {
+    toTarget (item) {
+      console.log(this.isBack)
+      if (this.isBack) {
+        let pages = getCurrentPages();
+        let prevPage = pages[pages.length - 2]; //上一个页
+        //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+        prevPage.setData({
+          circle: {
+            id: item.id,
+            circleName: item.circleName
+          }
+        })
+        uni.navigateBack();
+
+      } else {
+        uni.navigateTo({
+          url: "/pages/topic-detail/topic-detail?id=" + item.id
+        })
+      }
+    },
     search () {
       uni.navigateTo({
         url: "/pages/topic-list/topic-list?keyword=" + this.keyword

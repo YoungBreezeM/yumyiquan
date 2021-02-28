@@ -2,7 +2,8 @@
   <view>
     <view class="info-box">
       <view class="user-item">
-        <image :src="postDetail.user.avatarUrl"></image>
+        <image :src="postDetail.user.avatarUrl"
+               @click="toUserDetail(postDetail)"></image>
         <view class="user-item-user">
           <text class="user-name">{{postDetail.user.nickName}}</text>
           <view class="cxplain">{{postDetail.user.intro}}</view>
@@ -114,7 +115,8 @@
               v-for="(item, index) in postDetail.comments"
               :key="index">
           <image class="avatar"
-                 :src="item.user.avatarUrl"></image>
+                 :src="item.user.avatarUrl"
+                 @click="toUserDetail(item)"></image>
           <view class="c-content">
             <text>{{item.user.nickName}}</text>
             <text class="c-txt">{{item.content}}</text>
@@ -197,6 +199,11 @@ export default {
     }
   },
   methods: {
+    toUserDetail (item) {
+      uni.navigateTo({
+        url: "/pages/ucenter/ucenter?uid=" + item.user.id
+      })
+    },
     addComment () {
       this.isSubmitD = true;
       if (this.cTxt == "") {

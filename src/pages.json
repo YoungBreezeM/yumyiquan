@@ -74,11 +74,23 @@
       "style": {}
     },
     {
+      "path": "pages/push/push",
+      "style": {}
+    },
+    {
+      "path": "pages/route/index",
+      "style": {}
+    },
+    {
       "path": "pages/message/message",
       "style": {}
     },
     {
       "path": "pages/message-list/message-list",
+      "style": {}
+    },
+    {
+      "path": "pages/gua/gua",
       "style": {}
     },
     {
@@ -95,6 +107,12 @@
     },
     {
       "path": "pages/video-detail/video-detail",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/swiper-video/swiper-video",
       "style": {}
     },
     {
@@ -233,6 +251,12 @@
         "iconPath": "static/images/icon/quanzi-1.png",
         "selectedIconPath": "static/images/icon/quanzi.png",
         "text": "发现"
+      },
+      {
+        "pagePath": "pages/route/index",
+        "iconPath": "static/images/icon/push.png",
+        "selectedIconPath": "static/images/icon/push.png",
+        "text": "发布"
       },
       {
         "pagePath": "pages/message/message",
